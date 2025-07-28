@@ -1,0 +1,68 @@
+{
+  "navigation": {
+    "home": "Home",
+    "matching": "Matching",
+    "chat": "Chat",
+    "events": "Events",
+    "login": "Login",
+    "register": "Register",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "hero": {
+    "title": "Find Your True Love",
+    "subtitle": "China-Japan Dating Platform",
+    "tagline": "Connecting China and Japan, finding true love",
+    "tagline2": "Where language is no barrier",
+    "explore": "Start Exploring",
+    "learnMore": "Learn More",
+    "dashboard": "Go to Dashboard"
+  },
+  "features": {
+    "title": "Why Choose Waren?",
+    "subtitle": "We provide the most advanced dating and matching services to help you easily find your ideal partner",
+    "smartMatching": {
+      "title": "Smart Matching",
+      "description": "AI-powered smart matching system that recommends the most suitable partners for you"
+    },
+    "languageBridge": {
+      "title": "Language Bridge",
+      "description": "Real-time translation features for seamless communication between Chinese and Japanese users"
+    },
+    "secure": {
+      "title": "Secure & Reliable",
+      "description": "Strict identity verification and privacy protection to ensure your information security"
+    }
+  },
+  "cta": {
+    "title": "Ready to Start Your Love Journey?",
+    "subtitle": "Join Waren and find your true love",
+    "register": "Register Now"
+  },
+  "footer": {
+    "tagline": "Connecting China and Japan, finding true love",
+    "products": "Products",
+    "support": "Support",
+    "helpCenter": "Help Center",
+    "contact": "Contact Us",
+    "privacy": "Privacy Policy",
+    "followUs": "Follow Us",
+    "copyright": "Waren Design © {year}. All rights reserved."
+  },
+  "login": {
+    "title": "Welcome Back",
+    "subtitle": "Sign in to your account and start your love journey",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email address",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "signIn": "Sign In",
+    "signingIn": "Signing In...",
+    "forgotPassword": "Forgot Password?",
+    "or": "or",
+    "noAccount": "Don't have an account?",
+    "createAccount": "Sign up now",
+    "testAccount": "Test Account"
+  }
+} 

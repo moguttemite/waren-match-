@@ -1,0 +1,68 @@
+{
+  "navigation": {
+    "home": "ホーム",
+    "matching": "マッチング",
+    "chat": "チャット",
+    "events": "イベント",
+    "login": "ログイン",
+    "register": "登録",
+    "profile": "プロフィール",
+    "settings": "設定",
+    "logout": "ログアウト"
+  },
+  "hero": {
+    "title": "真の愛を見つけよう",
+    "subtitle": "中日交友恋愛プラットフォーム",
+    "tagline": "中日両国を繋ぎ、真の愛を見つける",
+    "tagline2": "言語の壁を越えて",
+    "explore": "探索を始める",
+    "learnMore": "詳しく見る",
+    "dashboard": "ダッシュボードへ"
+  },
+  "features": {
+    "title": "なぜ和恋を選ぶのか？",
+    "subtitle": "最新のマッチングサービスを提供し、理想のパートナーを見つけやすくします",
+    "smartMatching": {
+      "title": "スマートマッチング",
+      "description": "AIアルゴリズムによるスマートマッチングシステムで、最適なパートナーを推薦"
+    },
+    "languageBridge": {
+      "title": "言語ブリッジ",
+      "description": "リアルタイム翻訳機能で、中日ユーザーがスムーズに交流"
+    },
+    "secure": {
+      "title": "安全で信頼性",
+      "description": "厳格な身元確認とプライバシー保護で、あなたの情報を安全に保護"
+    }
+  },
+  "cta": {
+    "title": "恋愛の旅を始める準備はできましたか？",
+    "subtitle": "和恋に参加して、真の愛を見つけましょう",
+    "register": "今すぐ登録"
+  },
+  "footer": {
+    "tagline": "中日両国を繋ぎ、真の愛を見つける",
+    "products": "製品",
+    "support": "サポート",
+    "helpCenter": "ヘルプセンター",
+    "contact": "お問い合わせ",
+    "privacy": "プライバシーポリシー",
+    "followUs": "フォローする",
+    "copyright": "Waren Design © {year}. 全著作権所有."
+  },
+  "login": {
+    "title": "おかえりなさい",
+    "subtitle": "アカウントにログインして、恋愛の旅を始めましょう",
+    "email": "メールアドレス",
+    "emailPlaceholder": "メールアドレスを入力してください",
+    "password": "パスワード",
+    "passwordPlaceholder": "パスワードを入力してください",
+    "signIn": "ログイン",
+    "signingIn": "ログイン中...",
+    "forgotPassword": "パスワードを忘れましたか？",
+    "or": "または",
+    "noAccount": "アカウントをお持ちでない方は",
+    "createAccount": "今すぐ登録",
+    "testAccount": "テストアカウント"
+  }
+} 

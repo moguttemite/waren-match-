@@ -1,0 +1,68 @@
+{
+  "navigation": {
+    "home": "首页",
+    "matching": "匹配",
+    "chat": "聊天",
+    "events": "活动",
+    "login": "登录",
+    "register": "注册",
+    "profile": "个人资料",
+    "settings": "设置",
+    "logout": "退出登录"
+  },
+  "hero": {
+    "title": "找到你的真爱",
+    "subtitle": "中日交友恋爱平台",
+    "tagline": "连接中日两国，寻找真爱",
+    "tagline2": "让语言不再是障碍",
+    "explore": "开始探索",
+    "learnMore": "了解更多",
+    "dashboard": "进入仪表板"
+  },
+  "features": {
+    "title": "为什么选择和恋？",
+    "subtitle": "我们提供最先进的交友匹配服务，让您轻松找到心仪的伴侣",
+    "smartMatching": {
+      "title": "智能匹配",
+      "description": "基于AI算法的智能匹配系统，为您推荐最适合的伴侣"
+    },
+    "languageBridge": {
+      "title": "语言桥接",
+      "description": "实时翻译功能，让中日用户无障碍交流"
+    },
+    "secure": {
+      "title": "安全可靠",
+      "description": "严格的身份验证和隐私保护，确保您的信息安全"
+    }
+  },
+  "cta": {
+    "title": "准备开始您的恋爱之旅？",
+    "subtitle": "加入和恋，找到您的真爱",
+    "register": "立即注册"
+  },
+  "footer": {
+    "tagline": "连接中日两国，寻找真爱",
+    "products": "产品",
+    "support": "支持",
+    "helpCenter": "帮助中心",
+    "contact": "联系我们",
+    "privacy": "隐私政策",
+    "followUs": "关注我们",
+    "copyright": "Waren Design © {year}. 保留所有权利."
+  },
+  "login": {
+    "title": "欢迎回来",
+    "subtitle": "登录您的账户，开始您的恋爱之旅",
+    "email": "邮箱",
+    "emailPlaceholder": "请输入您的邮箱",
+    "password": "密码",
+    "passwordPlaceholder": "请输入您的密码",
+    "signIn": "登录",
+    "signingIn": "登录中...",
+    "forgotPassword": "忘记密码？",
+    "or": "或者",
+    "noAccount": "还没有账户？",
+    "createAccount": "立即注册",
+    "testAccount": "测试账户"
+  }
+} 

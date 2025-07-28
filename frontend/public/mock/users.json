@@ -1,0 +1,180 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "email": "zhang.san@example.com",
+      "username": "zhangsan",
+      "firstName": "张",
+      "lastName": "三",
+      "fullName": "张三",
+      "nationality": "chinese",
+      "gender": "male",
+      "birthDate": "1995-03-15",
+      "age": 29,
+      "location": "北京",
+      "targetLocation": "东京",
+      "bio": "喜欢日本文化，希望在日本生活和工作。正在学习日语，寻找志同道合的日本朋友。",
+      "avatar": "/avatars/user1.jpg",
+      "occupation": "软件工程师",
+      "education": "计算机科学学士",
+      "height": 175,
+      "interests": ["日本文化", "编程", "旅行", "摄影", "美食"],
+      "languages": ["中文", "英语", "日语初级"],
+      "relationshipGoals": "serious",
+      "isVerified": true,
+      "trustScore": 85,
+      "verificationStatus": "verified",
+      "lastActive": "2024-01-15T10:30:00Z",
+      "createdAt": "2024-01-01T08:00:00Z",
+      "updatedAt": "2024-01-15T10:30:00Z",
+      "profileCompleted": true,
+      "photos": [
+        "/photos/user1_1.jpg",
+        "/photos/user1_2.jpg",
+        "/photos/user1_3.jpg"
+      ],
+      "preferences": {
+        "ageRange": {
+          "min": 25,
+          "max": 35
+        },
+        "location": ["东京", "大阪", "京都"],
+        "nationality": ["japanese", "chinese"],
+        "relationshipGoals": ["serious", "marriage"]
+      }
+    },
+    {
+      "id": "2",
+      "email": "tanaka.yuki@example.com",
+      "username": "tanakayuki",
+      "firstName": "田中",
+      "lastName": "雪",
+      "fullName": "田中雪",
+      "nationality": "japanese",
+      "gender": "female",
+      "birthDate": "1993-07-22",
+      "age": 31,
+      "location": "东京",
+      "targetLocation": "北京",
+      "bio": "对中国文化很感兴趣，正在学习中文。希望找到真诚的中国朋友，了解中国文化。",
+      "avatar": "/avatars/user2.jpg",
+      "occupation": "设计师",
+      "education": "艺术设计学士",
+      "height": 162,
+      "interests": ["中国文化", "设计", "艺术", "烹饪", "音乐"],
+      "languages": ["日语", "英语", "中文初级"],
+      "relationshipGoals": "serious",
+      "isVerified": true,
+      "trustScore": 92,
+      "verificationStatus": "verified",
+      "lastActive": "2024-01-15T11:45:00Z",
+      "createdAt": "2024-01-02T09:15:00Z",
+      "updatedAt": "2024-01-15T11:45:00Z",
+      "profileCompleted": true,
+      "photos": [
+        "/photos/user2_1.jpg",
+        "/photos/user2_2.jpg"
+      ],
+      "preferences": {
+        "ageRange": {
+          "min": 28,
+          "max": 38
+        },
+        "location": ["北京", "上海", "深圳"],
+        "nationality": ["chinese", "japanese"],
+        "relationshipGoals": ["serious", "marriage"]
+      }
+    },
+    {
+      "id": "3",
+      "email": "li.mei@example.com",
+      "username": "limei",
+      "firstName": "李",
+      "lastName": "美",
+      "fullName": "李美",
+      "nationality": "chinese",
+      "gender": "female",
+      "birthDate": "1997-11-08",
+      "age": 26,
+      "location": "上海",
+      "targetLocation": "大阪",
+      "bio": "热爱日本动漫和美食，正在学习日语。希望在日本生活，体验不同的文化。",
+      "avatar": "/avatars/user3.jpg",
+      "occupation": "翻译",
+      "education": "日语文学学士",
+      "height": 168,
+      "interests": ["日本动漫", "美食", "旅行", "语言学习", "电影"],
+      "languages": ["中文", "日语", "英语"],
+      "relationshipGoals": "casual",
+      "isVerified": false,
+      "trustScore": 45,
+      "verificationStatus": "pending",
+      "lastActive": "2024-01-14T16:20:00Z",
+      "createdAt": "2024-01-10T14:30:00Z",
+      "updatedAt": "2024-01-14T16:20:00Z",
+      "profileCompleted": false,
+      "photos": [
+        "/photos/user3_1.jpg"
+      ],
+      "preferences": {
+        "ageRange": {
+          "min": 24,
+          "max": 32
+        },
+        "location": ["大阪", "东京", "京都"],
+        "nationality": ["japanese"],
+        "relationshipGoals": ["casual", "serious"]
+      }
+    },
+    {
+      "id": "4",
+      "email": "yamada.hiroshi@example.com",
+      "username": "yamadahiroshi",
+      "firstName": "山田",
+      "lastName": "浩",
+      "fullName": "山田浩",
+      "nationality": "japanese",
+      "gender": "male",
+      "birthDate": "1990-05-12",
+      "age": 33,
+      "location": "大阪",
+      "targetLocation": "上海",
+      "bio": "对中国历史和文化很感兴趣，正在学习中文。希望找到真诚的中国朋友。",
+      "avatar": "/avatars/user4.jpg",
+      "occupation": "教师",
+      "education": "历史学硕士",
+      "height": 178,
+      "interests": ["中国历史", "教育", "阅读", "书法", "茶道"],
+      "languages": ["日语", "中文", "英语"],
+      "relationshipGoals": "serious",
+      "isVerified": true,
+      "trustScore": 88,
+      "verificationStatus": "verified",
+      "lastActive": "2024-01-15T09:15:00Z",
+      "createdAt": "2024-01-05T10:45:00Z",
+      "updatedAt": "2024-01-15T09:15:00Z",
+      "profileCompleted": true,
+      "photos": [
+        "/photos/user4_1.jpg",
+        "/photos/user4_2.jpg",
+        "/photos/user4_3.jpg"
+      ],
+      "preferences": {
+        "ageRange": {
+          "min": 26,
+          "max": 36
+        },
+        "location": ["上海", "北京", "杭州"],
+        "nationality": ["chinese"],
+        "relationshipGoals": ["serious", "marriage"]
+      }
+    }
+  ],
+  "metadata": {
+    "totalUsers": 4,
+    "verifiedUsers": 3,
+    "chineseUsers": 2,
+    "japaneseUsers": 2,
+    "lastUpdated": "2024-01-15T12:00:00Z"
+  }
+} 
