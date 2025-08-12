@@ -1,218 +1,316 @@
-// Mock 数据读取工具
+// Mock 数据管理系统
+// 用于在后端未准备好时模拟数据库表
 
-// 用户类型定义
-export interface MockUser {
-  id: string
-  email: string
-  username: string
-  firstName: string
-  lastName: string
-  fullName: string
-  nationality: 'chinese' | 'japanese' | 'other'
-  gender: 'male' | 'female' | 'other'
-  birthDate: string
-  age: number
-  location: string
-  targetLocation: string
-  bio: string
-  avatar?: string
-  occupation: string
-  education: string
-  height: number
-  interests: string[]
-  languages: string[]
-  relationshipGoals: 'casual' | 'serious' | 'marriage'
-  isVerified: boolean
-  trustScore: number
-  verificationStatus: 'pending' | 'verified' | 'rejected'
-  lastActive: string
-  createdAt: string
-  updatedAt: string
-  profileCompleted: boolean
-  photos: string[]
-  preferences: {
-    ageRange: {
-      min: number
-      max: number
-    }
-    location: string[]
-    nationality: string[]
-    relationshipGoals: string[]
-  }
-}
+import { User } from '../types'
 
-// 认证会话类型
-export interface MockSession {
-  id: string
-  userId: string
-  token: string
-  refreshToken: string
-  expiresAt: string
-  createdAt: string
-  lastActive: string
-  ipAddress: string
-  userAgent: string
-}
-
-// 验证码类型
-export interface MockVerificationCode {
-  id: string
-  userId: string
-  email: string
-  code: string
-  type: 'email_verification' | 'phone_verification'
-  expiresAt: string
-  createdAt: string
-  used: boolean
-}
-
-// 登录尝试类型
-export interface MockLoginAttempt {
-  id: string
-  email: string
-  ipAddress: string
-  success: boolean
-  attemptedAt: string
-  userAgent: string
-}
-
-// 读取用户数据
-export async function getMockUsers(): Promise<MockUser[]> {
+// 从 auth_users.json 加载认证用户数据
+export async function loadAuthUsers() {
   try {
-    const response = await fetch('/mock/users.json')
-    const data = await response.json()
-    return data.users || []
+    // 首先尝试从 localStorage 读取
+    const storedAuthUsers = localStorage.getItem('mock_auth_users')
+    if (storedAuthUsers) {
+      const parsed = JSON.parse(storedAuthUsers)
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        console.log('从 localStorage 加载认证用户数据:', parsed.length, '个用户')
+        return parsed
+      }
+    }
+    
+    // 如果 localStorage 没有数据，从文件加载
+    const response = await fetch('/mock/auth_users.json')
+    if (response.ok) {
+      const data = await response.json()
+      console.log('从文件加载认证用户数据:', data.length, '个用户')
+      return data
+    }
+    throw new Error('Failed to load auth users')
   } catch (error) {
-    console.error('Failed to load mock users:', error)
+    console.error('Error loading auth users:', error)
     return []
   }
 }
 
-// 读取认证数据
-export async function getMockAuthData(): Promise<{
-  sessions: MockSession[]
-  verificationCodes: MockVerificationCode[]
-  loginAttempts: MockLoginAttempt[]
-}> {
+// 从 users.json 加载用户资料数据
+export async function loadUsers() {
   try {
-    const response = await fetch('/mock/auth.json')
-    const data = await response.json()
-    return {
-      sessions: data.sessions || [],
-      verificationCodes: data.verificationCodes || [],
-      loginAttempts: data.loginAttempts || [],
+    // 首先尝试从 localStorage 读取
+    const storedUsers = localStorage.getItem('mock_users')
+    if (storedUsers) {
+      const parsed = JSON.parse(storedUsers)
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        console.log('从 localStorage 加载用户资料数据:', parsed.length, '个用户')
+        return parsed
+      }
     }
+    
+    // 如果 localStorage 没有数据，从文件加载
+    const response = await fetch('/mock/users.json')
+    if (response.ok) {
+      const data = await response.json()
+      const users = data.users || []
+      console.log('从文件加载用户资料数据:', users.length, '个用户')
+      return users
+    }
+    throw new Error('Failed to load users')
   } catch (error) {
-    console.error('Failed to load mock auth data:', error)
-    return {
-      sessions: [],
-      verificationCodes: [],
-      loginAttempts: [],
-    }
+    console.error('Error loading users:', error)
+    return []
   }
 }
 
-// 根据邮箱查找用户
-export async function findUserByEmail(email: string): Promise<MockUser | null> {
-  const users = await getMockUsers()
-  return users.find(user => user.email === email) || null
-}
-
-// 根据ID查找用户
-export async function findUserById(id: string): Promise<MockUser | null> {
-  const users = await getMockUsers()
-  return users.find(user => user.id === id) || null
-}
-
-// 验证用户凭据
-export async function validateUserCredentials(email: string, password: string): Promise<MockUser | null> {
-  const user = await findUserByEmail(email)
+// 根据邮箱查找认证用户
+export async function findAuthUserByEmail(email: string) {
+  await initializeMockData()
   
-  // 在真实环境中，这里会验证密码哈希
-  // 在 mock 环境中，我们使用简单的密码验证
-  if (user) {
-    // 模拟密码验证（实际应该是 bcrypt 比较）
-    const mockPassword = 'password123' // 所有用户的默认密码
-    if (password === mockPassword) {
-      return user
-    }
+  // 首先从内存存储中查找
+  const memoryUser = mockAuthUsers.find((user: any) => user.email === email)
+  if (memoryUser) {
+    console.log('从内存存储中找到用户:', email)
+    return memoryUser
   }
   
+  // 如果内存中没有，从文件加载并查找
+  const authUsers = await loadAuthUsers()
+  const fileUser = authUsers.find((user: any) => user.email === email)
+  if (fileUser) {
+    console.log('从文件存储中找到用户:', email)
+    return fileUser
+  }
+  
+  console.log('未找到用户:', email)
   return null
 }
 
-// 创建新用户
-export async function createMockUser(userData: Omit<MockUser, 'id' | 'createdAt' | 'updatedAt' | 'lastActive' | 'trustScore' | 'isVerified' | 'verificationStatus' | 'profileCompleted'>): Promise<MockUser> {
-  const users = await getMockUsers()
-  const newId = (users.length + 1).toString()
-  const now = new Date().toISOString()
-  
-  const newUser: MockUser = {
-    ...userData,
-    id: newId,
-    createdAt: now,
-    updatedAt: now,
-    lastActive: now,
-    trustScore: 50, // 新用户默认信任分数
-    isVerified: false,
-    verificationStatus: 'pending',
-    profileCompleted: false,
-  }
-  
-  return newUser
+// 根据邮箱查找用户资料
+export async function findUserByEmail(email: string) {
+  const users = await loadUsers()
+  return users.find((user: any) => user.email === email)
 }
 
-// 更新用户信息
-export async function updateMockUser(id: string, updates: Partial<MockUser>): Promise<MockUser | null> {
-  const users = await getMockUsers()
-  const userIndex = users.findIndex(user => user.id === id)
+// 根据 ID 查找认证用户
+export async function findAuthUserById(id: string) {
+  const authUsers = await loadAuthUsers()
+  return authUsers.find((user: any) => user.id === id)
+}
+
+// 根据 ID 查找用户资料
+export async function findUserById(id: string) {
+  const users = await loadUsers()
+  return users.find((user: any) => user.email === id)
+}
+
+// 验证用户密码（模拟）
+export function verifyPassword(password: string, storedHash: string): boolean {
+  // 在实际环境中，这里应该使用 bcrypt 或其他加密库
+  // 目前为了测试，我们使用简单的密码验证
+  const testPasswords = {
+    'password123': '$2b$12$abcdefghijklmnopqrstuv1234567890abcdEfghijklmn',
+    'test123': '$2b$12$bcdefghijklmnopqrstuv1234567890abcdEfghijklmn',
+    'admin123': '$2b$12$efghijklmnopqrstuv1234567890abcdEfghijklmn'
+  }
   
-  if (userIndex === -1) {
+  return testPasswords[password as keyof typeof testPasswords] === storedHash
+}
+
+// 合并认证用户和用户资料数据
+export async function getFullUserData(email: string) {
+  const authUser = await findAuthUserByEmail(email)
+  const userProfile = await findUserByEmail(email)
+  
+  if (!authUser) {
     return null
   }
   
-  const updatedUser = {
-    ...users[userIndex],
-    ...updates,
-    updatedAt: new Date().toISOString(),
+  // 合并数据，优先使用用户资料数据
+  return {
+    // 认证相关字段
+    id: authUser.id,
+    public_no: authUser.public_no,
+    email: authUser.email,
+    phone: authUser.phone,
+    status: authUser.status,
+    role: authUser.role,
+    email_verified_at: authUser.email_verified_at,
+    phone_verified_at: authUser.phone_verified_at,
+    token_version: authUser.token_version,
+    last_sign_in_at: authUser.last_sign_in_at,
+    created_at: authUser.created_at,
+    updated_at: authUser.updated_at,
+    
+    // 用户资料字段（如果有的话）
+    ...userProfile,
+    
+    // 确保关键字段存在
+    name: userProfile?.fullName || userProfile?.name || 'Unknown User',
+    avatar: userProfile?.avatar,
+    nationality: userProfile?.nationality || 'other',
+    isVerified: authUser.email_verified_at !== null,
+    trustScore: userProfile?.trustScore || 0
   }
-  
-  return updatedUser
 }
 
-// 生成模拟 JWT 令牌
-export function generateMockToken(userId: string): string {
-  const header = { alg: 'HS256', typ: 'JWT' }
-  const payload = {
-    userId,
-    iat: Math.floor(Date.now() / 1000),
-    exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60), // 24小时过期
-  }
+// 获取所有活跃用户
+export async function getActiveUsers() {
+  const authUsers = await loadAuthUsers()
+  const users = await loadUsers()
   
-  // 简单的 base64 编码（实际应该是真正的 JWT）
-  const headerB64 = btoa(JSON.stringify(header))
-  const payloadB64 = btoa(JSON.stringify(payload))
-  
-  return `${headerB64}.${payloadB64}.mock_signature_${userId}`
+  return authUsers
+    .filter((authUser: any) => authUser.status === 'active')
+    .map((authUser: any) => {
+      const userProfile = users.find((user: any) => user.email === authUser.email)
+      return {
+        ...authUser,
+        ...userProfile,
+        name: userProfile?.fullName || userProfile?.name || 'Unknown User',
+        isVerified: authUser.email_verified_at !== null
+      }
+    })
 }
 
-// 验证模拟令牌
-export function verifyMockToken(token: string): { userId: string; valid: boolean } {
+// 内存存储，用于模拟数据库
+let mockAuthUsers: any[] = []
+let mockUsers: any[] = []
+
+// 初始化内存数据
+async function initializeMockData() {
+  if (mockAuthUsers.length === 0) {
+    const authUsers = await loadAuthUsers()
+    mockAuthUsers = [...authUsers] // 确保是数组的副本
+    console.log('初始化内存认证用户数据:', mockAuthUsers.length, '个用户')
+  }
+  if (mockUsers.length === 0) {
+    const users = await loadUsers()
+    mockUsers = [...users] // 确保是数组的副本
+    console.log('初始化内存用户资料数据:', mockUsers.length, '个用户')
+  }
+}
+
+// 模拟创建新用户并添加到mock数据
+export async function createMockUser(userData: {
+  email: string
+  password: string
+}) {
+  await initializeMockData()
+  
+  // 生成新的 ID 和 public_no
+  const newId = `new-user-${Date.now()}`
+  const newPublicNo = Math.max(...mockAuthUsers.map((u: any) => u.public_no)) + 1
+  
+  // 创建认证用户记录
+  const newAuthUser = {
+    id: newId,
+    public_no: newPublicNo,
+    email: userData.email,
+    phone: null,
+    password_hash: `$2b$12$newhash${Date.now()}`,
+    status: 'active',
+    role: 'user',
+    email_verified_at: null,
+    phone_verified_at: null,
+    token_version: 0,
+    last_password_change_at: new Date().toISOString(),
+    last_sign_in_at: null,
+    created_ip: '127.0.0.1',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }
+  
+  // 创建用户资料记录
+  const newUserProfile = {
+    id: newId,
+    email: userData.email,
+    fullName: '新用户',
+    nationality: 'other',
+    isVerified: false,
+    trustScore: 0,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  }
+  
+  // 添加到内存存储
+  mockAuthUsers.push(newAuthUser)
+  mockUsers.push(newUserProfile)
+  
+  // 保存到 localStorage 作为持久化存储
   try {
-    const parts = token.split('.')
-    if (parts.length !== 3) {
-      return { userId: '', valid: false }
-    }
-    
-    const payload = JSON.parse(atob(parts[1]))
-    const now = Math.floor(Date.now() / 1000)
-    
-    if (payload.exp < now) {
-      return { userId: '', valid: false }
-    }
-    
-    return { userId: payload.userId, valid: true }
+    localStorage.setItem('mock_auth_users', JSON.stringify(mockAuthUsers))
+    localStorage.setItem('mock_users', JSON.stringify(mockUsers))
   } catch (error) {
-    return { userId: '', valid: false }
+    console.warn('无法保存到 localStorage:', error)
   }
-} 
+  
+  console.log('Mock: 创建新用户并保存到内存', {
+    authUser: newAuthUser,
+    userProfile: newUserProfile,
+    totalAuthUsers: mockAuthUsers.length,
+    totalUsers: mockUsers.length
+  })
+  
+  return {
+    authUser: newAuthUser,
+    userProfile: newUserProfile,
+    success: true
+  }
+}
+
+// 模拟邮箱验证码发送（为后续功能预留）
+export async function sendEmailVerificationCode(email: string): Promise<{ success: boolean; message?: string }> {
+  // 模拟发送验证码
+  console.log(`Mock: 向 ${email} 发送验证码`)
+  
+  // 在实际环境中，这里会调用邮件服务
+  return {
+    success: true,
+    message: '验证码已发送到您的邮箱'
+  }
+}
+
+// 模拟验证邮箱验证码
+export async function verifyEmailCode(email: string, code: string): Promise<{ success: boolean; message?: string }> {
+  // 模拟验证码验证
+  console.log(`Mock: 验证邮箱 ${email} 的验证码 ${code}`)
+  
+  // 在实际环境中，这里会验证验证码
+  if (code === '123456') { // 模拟验证码
+    return {
+      success: true,
+      message: '邮箱验证成功'
+    }
+  }
+  
+  return {
+    success: false,
+    message: '验证码错误'
+  }
+}
+
+// 获取所有mock用户数据（用于调试）
+export async function getAllMockUsers() {
+  // 确保数据已初始化
+  await initializeMockData()
+  
+  console.log('=== Mock 用户数据 ===')
+  console.log('内存中的认证用户:', mockAuthUsers)
+  console.log('内存中的用户资料:', mockUsers)
+  console.log('localStorage 中的认证用户:', localStorage.getItem('mock_auth_users'))
+  console.log('localStorage 中的用户资料:', localStorage.getItem('mock_users'))
+  return {
+    authUsers: mockAuthUsers,
+    users: mockUsers,
+    localStorage: {
+      authUsers: localStorage.getItem('mock_auth_users'),
+      users: localStorage.getItem('mock_users')
+    }
+  }
+}
+
+// 清除所有mock数据（用于测试）
+export function clearMockData() {
+  mockAuthUsers = []
+  mockUsers = []
+  localStorage.removeItem('mock_auth_users')
+  localStorage.removeItem('mock_users')
+  console.log('已清除所有mock数据')
+}
+
+ 

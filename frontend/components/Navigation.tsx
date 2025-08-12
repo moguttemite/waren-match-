@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import UserAvatar from './UserAvatar'
 import { 
   Menu, 
   X, 
@@ -31,6 +32,7 @@ export default function Navigation({ isAuthenticated = false, user }: Navigation
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false)
   const { language, setLanguage } = useLanguage()
   const pathname = usePathname()
+  const router = useRouter()
   
   const languageMenuRef = useRef<HTMLDivElement>(null)
   const userMenuRef = useRef<HTMLDivElement>(null)
@@ -63,11 +65,29 @@ export default function Navigation({ isAuthenticated = false, user }: Navigation
     { href: '/events', label: t(language, 'navigation.events'), icon: Calendar },
   ]
 
+  // 退出登录处理函数
+  const handleLogout = () => {
+    // 清除本地存储的用户信息和令牌
+    localStorage.removeItem('user')
+    localStorage.removeItem('token')
+    
+    // 关闭用户菜单
+    setIsUserMenuOpen(false)
+    
+    // 跳转到主页
+    router.push('/')
+  }
+
   // 用户菜单项
-  const userMenuItems = [
+  const userMenuItems: Array<{
+    href: string
+    label: string
+    icon: any
+    onClick?: () => void
+  }> = [
     { href: '/profile', label: t(language, 'navigation.profile'), icon: User },
     { href: '/settings', label: t(language, 'navigation.settings'), icon: Settings },
-    { href: '/logout', label: t(language, 'navigation.logout'), icon: LogOut, onClick: () => console.log('logout') },
+    { href: '/logout', label: t(language, 'navigation.logout'), icon: LogOut, onClick: handleLogout },
   ]
 
   // 语言选项
@@ -169,25 +189,15 @@ export default function Navigation({ isAuthenticated = false, user }: Navigation
             {/* User Menu / Auth Buttons */}
             {isAuthenticated ? (
               <div className="relative" ref={userMenuRef}>
-                <button
-                  onClick={toggleUserMenu}
-                  className="flex items-center space-x-2 p-2 rounded-full hover:bg-gray-100 transition-colors"
-                >
-                  {user?.avatar ? (
-                    <img
-                      src={user.avatar}
-                      alt={user.name}
-                      className="w-8 h-8 rounded-full"
-                    />
-                  ) : (
-                    <div className="w-8 h-8 bg-gradient-to-r from-pink-500 to-red-500 rounded-full flex items-center justify-center">
-                      <User className="w-4 h-4 text-white" />
-                    </div>
-                  )}
-                  <span className="hidden sm:block text-sm font-medium text-gray-700">
-                    {user?.name || '用户'}
-                  </span>
-                </button>
+                                 <button
+                   onClick={toggleUserMenu}
+                   className="flex items-center space-x-2 p-2 rounded-full hover:bg-gray-100 transition-colors"
+                 >
+                   <UserAvatar user={user} size={32} />
+                   <span className="hidden sm:block text-sm font-medium text-gray-700">
+                     {user?.name || '用户'}
+                   </span>
+                 </button>
 
                 {/* User Dropdown */}
                 {isUserMenuOpen && (
@@ -195,15 +205,29 @@ export default function Navigation({ isAuthenticated = false, user }: Navigation
                     {userMenuItems.map((item) => {
                       const Icon = item.icon
                       return (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          onClick={() => setIsUserMenuOpen(false)}
-                          className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                        >
-                          {Icon && <Icon className="w-4 h-4" />}
-                          <span>{item.label}</span>
-                        </Link>
+                        <div key={item.href}>
+                          {item.onClick ? (
+                            <button
+                              onClick={() => {
+                                item.onClick?.()
+                                setIsUserMenuOpen(false)
+                              }}
+                              className="w-full flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                            >
+                              {Icon && <Icon className="w-4 h-4" />}
+                              <span>{item.label}</span>
+                            </button>
+                          ) : (
+                            <Link
+                              href={item.href}
+                              onClick={() => setIsUserMenuOpen(false)}
+                              className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                            >
+                              {Icon && <Icon className="w-4 h-4" />}
+                              <span>{item.label}</span>
+                            </Link>
+                          )}
+                        </div>
                       )
                     })}
                   </div>

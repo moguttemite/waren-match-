@@ -43,7 +43,7 @@ export default function HomePage() {
   const handleLoginSuccess = (userData: any) => {
     setUser(userData)
     // 可以在这里添加登录成功后的逻辑
-    console.log('Login successful:', userData)
+    
   }
 
   // 处理注册按钮点击

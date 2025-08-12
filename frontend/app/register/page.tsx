@@ -3,15 +3,19 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Eye, EyeOff, Mail, Lock, Heart } from 'lucide-react'
+import { Eye, EyeOff, Mail, Lock, User, Heart, Calendar, MapPin, Phone } from 'lucide-react'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { t } from '../../lib/translations'
-import { login } from '../../lib/api/auth'
+import { register } from '../../lib/api/auth'
 
-export default function LoginPage() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+export default function RegisterPage() {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    confirmPassword: ''
+  })
   const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [isCheckingAuth, setIsCheckingAuth] = useState(true)
@@ -27,29 +31,64 @@ export default function LoginPage() {
       // 用户已登录，跳转到仪表板
       router.push('/dashboard')
     } else {
-      // 用户未登录，显示登录页面
+      // 用户未登录，显示注册页面
       setIsCheckingAuth(false)
     }
   }, [router])
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }))
+    setError('') // 清除错误信息
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError('')
 
+    // 验证密码确认
+    if (formData.password !== formData.confirmPassword) {
+      setError('两次输入的密码不一致')
+      setIsLoading(false)
+      return
+    }
+
+    // 验证密码长度
+    if (formData.password.length < 6) {
+      setError('密码长度至少6位')
+      setIsLoading(false)
+      return
+    }
+
     try {
-      const response = await login({ email, password })
+      console.log('开始调用注册API...')
+      console.log('注册数据:', { email: formData.email, password: '***' })
+      
+      const response = await register({
+        email: formData.email,
+        password: formData.password
+      })
+      
+      console.log('注册API响应:', response)
       
       if (response.success && response.data) {
+        console.log('注册成功，保存用户数据到localStorage')
+        // 保存用户信息和令牌到 localStorage
         localStorage.setItem('user', JSON.stringify(response.data.user))
         localStorage.setItem('token', response.data.token)
+        
+        // 跳转到仪表板
         router.push('/dashboard')
       } else {
-        setError(response.error || '登录失败')
+        console.log('注册失败:', response.error)
+        setError(response.error || '注册失败')
       }
     } catch (error) {
-      console.error('Login error:', error)
-      setError('登录失败，请稍后重试')
+      console.error('Register error:', error)
+      setError('注册失败，请稍后重试')
     } finally {
       setIsLoading(false)
     }
@@ -68,7 +107,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-blue-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-blue-50 flex items-center justify-center px-4 py-8">
       <div className="max-w-md w-full">
         {/* Logo */}
         <div className="text-center mb-8">
@@ -83,33 +122,32 @@ export default function LoginPage() {
           </Link>
         </div>
 
-        {/* Login Form */}
+        {/* Register Form */}
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              {t(language, 'login.title')}
+              {t(language, 'register.title')}
             </h2>
             <p className="text-gray-600">
-              {t(language, 'login.subtitle')}
+              {t(language, 'register.subtitle')}
             </p>
           </div>
-
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email Field */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                {t(language, 'login.email')}
+                {t(language, 'register.email')}
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <input
                   id="email"
                   type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={formData.email}
+                  onChange={(e) => handleInputChange('email', e.target.value)}
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-colors"
-                  placeholder={t(language, 'login.emailPlaceholder')}
+                  placeholder={t(language, 'register.emailPlaceholder')}
                   required
                 />
               </div>
@@ -118,17 +156,17 @@ export default function LoginPage() {
             {/* Password Field */}
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                {t(language, 'login.password')}
+                {t(language, 'register.password')}
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={formData.password}
+                  onChange={(e) => handleInputChange('password', e.target.value)}
                   className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-colors"
-                  placeholder={t(language, 'login.passwordPlaceholder')}
+                  placeholder={t(language, 'register.passwordPlaceholder')}
                   required
                 />
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
@@ -143,6 +181,36 @@ export default function LoginPage() {
               </div>
             </div>
 
+            {/* Confirm Password Field */}
+            <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+                {t(language, 'register.confirmPassword')}
+              </label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <input
+                  id="confirmPassword"
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  value={formData.confirmPassword}
+                  onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
+                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-colors"
+                  placeholder={t(language, 'register.confirmPasswordPlaceholder')}
+                  required
+                />
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+
+
             {/* Error Message */}
             {error && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-4">
@@ -150,48 +218,37 @@ export default function LoginPage() {
               </div>
             )}
 
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={isLoading}
               className="w-full bg-gradient-to-r from-pink-500 to-red-500 text-white py-3 rounded-lg font-semibold hover:from-pink-600 hover:to-red-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? t(language, 'login.signingIn') : t(language, 'login.signIn')}
+              {isLoading ? t(language, 'register.creating') : t(language, 'register.createAccount')}
             </button>
-
-            {/* Forgot Password */}
-            <div className="text-center">
-              <Link
-                href="/forgot-password"
-                className="text-sm text-pink-600 hover:text-pink-700 transition-colors"
-              >
-                {t(language, 'login.forgotPassword')}
-              </Link>
-            </div>
           </form>
 
           {/* Divider */}
           <div className="my-6 flex items-center">
             <div className="flex-1 border-t border-gray-300"></div>
-            <span className="px-4 text-sm text-gray-500">{t(language, 'login.or')}</span>
+            <span className="px-4 text-sm text-gray-500">{t(language, 'register.or')}</span>
             <div className="flex-1 border-t border-gray-300"></div>
           </div>
 
-          {/* Register Link */}
+          {/* Login Link */}
           <div className="text-center">
             <p className="text-gray-600">
-              {t(language, 'login.noAccount')}{' '}
+              {t(language, 'register.haveAccount')}{' '}
               <Link
-                href="/register"
+                href="/login"
                 className="text-pink-600 hover:text-pink-700 font-semibold transition-colors"
               >
-                {t(language, 'login.createAccount')}
+                {t(language, 'register.signIn')}
               </Link>
             </p>
           </div>
         </div>
-
-
       </div>
     </div>
   )
-} 
+}

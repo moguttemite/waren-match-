@@ -153,13 +153,15 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }: LoginMod
                   placeholder={t(language, 'login.passwordPlaceholder')}
                   required
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -204,16 +206,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }: LoginMod
             </p>
           </div>
 
-          {/* Test Account Info */}
-          <div className="mt-4 bg-blue-50 rounded-lg p-3">
-            <h4 className="text-xs font-semibold text-blue-900 mb-1">
-              {t(language, 'login.testAccount')}
-            </h4>
-            <div className="text-xs text-blue-700 space-y-1">
-              <p>Email: zhang.san@example.com</p>
-              <p>Password: password123</p>
-            </div>
-          </div>
+
         </div>
       </div>
     </div>

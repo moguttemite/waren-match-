@@ -19,14 +19,20 @@ async function apiRequest<T>(
   }
 
   try {
+    console.log('API请求URL:', url)
+    console.log('API请求选项:', { method: defaultOptions.method, headers: defaultOptions.headers })
+    
     const response = await fetch(url, defaultOptions)
+    console.log('API响应状态:', response.status, response.statusText)
     
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}))
       throw new Error(errorData.message || `HTTP error! status: ${response.status}`)
     }
 
-    return await response.json()
+    const data = await response.json()
+    console.log('API响应数据:', data)
+    return data
   } catch (error) {
     console.error('API request failed:', error)
     throw error
@@ -62,11 +68,6 @@ export interface LoginResponse {
 export interface RegisterRequest {
   email: string
   password: string
-  name: string
-  nationality: 'chinese' | 'japanese' | 'other'
-  gender: 'male' | 'female' | 'other'
-  birthDate: string
-  location: string
 }
 
 // 注册响应类型

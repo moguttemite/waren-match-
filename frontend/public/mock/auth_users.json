@@ -1,0 +1,20 @@
+[
+  {
+    "id": "2f3a4c9e-1234-4d89-b7f1-9876543210ab",
+    "public_no": 1001000,
+    "email": "zhang.san@example.com",
+    "phone": "+819012345678",
+    "password_hash": "$2b$12$abcdefghijklmnopqrstuv1234567890abcdEfghijklmn", 
+    "status": "active",
+    "role": "user",
+    "email_verified_at": "2025-08-01T09:30:00Z",
+    "phone_verified_at": "2025-08-01T09:35:00Z",
+    "token_version": 0,
+    "last_password_change_at": "2025-08-01T09:40:00Z",
+    "last_sign_in_at": "2025-08-12T03:00:00Z",
+    "created_ip": "192.168.1.10",
+    "created_at": "2025-08-01T09:00:00Z",
+    "updated_at": "2025-08-12T03:05:00Z"
+  }
+]
+  

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import UserAvatar from '../../components/UserAvatar'
 import Navigation from '../../components/Navigation'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { t } from '../../lib/translations'
@@ -48,9 +49,7 @@ export default function DashboardPage() {
           {/* Welcome Section */}
           <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
             <div className="flex items-center space-x-4">
-              <div className="w-16 h-16 bg-gradient-to-r from-pink-500 to-red-500 rounded-full flex items-center justify-center">
-                <User className="w-8 h-8 text-white" />
-              </div>
+              <UserAvatar user={user} size={64} />
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">
                   欢迎回来，{user.name}！
